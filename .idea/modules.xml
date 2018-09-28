@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/CapitalOneAssessment.iml" filepath="$PROJECT_DIR$/CapitalOneAssessment.iml" />
+      <module fileurl="file://$PROJECT_DIR$/COAssessment.iml" filepath="$PROJECT_DIR$/COAssessment.iml" />
     </modules>
   </component>
 </project>
