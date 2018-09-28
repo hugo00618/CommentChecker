@@ -39,14 +39,14 @@ public class LexerJava extends Lexer {
                         isBlockLineComment = true;
                         line = line.substring(2);
                     } else if (line.startsWith("\"")) {
-                        intraLineState = IntraLineState.quote;
+                        intraLineState = IntraLineState.doubleQuote;
                         line = line.substring(1);
                     } else {
                         intraLineState = IntraLineState.code;
                         line = line.substring(1);
                     }
                     break;
-                case quote:
+                case doubleQuote:
                     // if there is a \" inside of quotes, ignore it
                     if (line.startsWith("\\\"")) {
                         line = line.substring(2);

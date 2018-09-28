@@ -2,7 +2,7 @@ public abstract class Lexer {
 
     // tracks the state within a line
     public enum IntraLineState {
-        start, code, quote, inlineComment, blockComment;
+        start, code, singleQuote, doubleQuote, inlineComment, blockComment;
     }
 
     // tracks the state between lines

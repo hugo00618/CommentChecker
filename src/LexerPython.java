@@ -29,19 +29,38 @@ public class LexerPython extends Lexer {
                         }
 
                         line = line.substring(1);
+                    } else if (line.startsWith("\'")) {
+                        intraLineState = IntraLineState.singleQuote;
+                        line = line.substring(1);
                     } else if (line.startsWith("\"")) {
-                        intraLineState = IntraLineState.quote;
+                        intraLineState = IntraLineState.doubleQuote;
                         line = line.substring(1);
                     } else {
                         intraLineState = IntraLineState.code;
                         line = line.substring(1);
                     }
                     break;
-                case quote:
-                    if (line.startsWith("\"")) {
+                case singleQuote:
+                    // ignore single quotes as char content
+                    if (line.startsWith("\\\'")) {
+                        line = line.substring(2);
+                    } else if (line.startsWith("\'")) {
                         intraLineState = IntraLineState.code;
+                        line = line.substring(1);
+                    } else {
+                        line = line.substring(1);
                     }
-                    line = line.substring(1);
+                    break;
+                case doubleQuote:
+                    // ignore double quotes as string content
+                    if (line.startsWith("\\\"")) {
+                        line = line.substring(2);
+                    } else if (line.startsWith("\"")) {
+                        intraLineState = IntraLineState.code;
+                        line = line.substring(1);
+                    } else {
+                        line = line.substring(1);
+                    }
                     break;
                 case inlineComment:
                     isComment = true;
