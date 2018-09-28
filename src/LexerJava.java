@@ -99,41 +99,4 @@ public class LexerJava extends Lexer {
         if (isStartOfBlockComment) res.numBlockComment++;
         res.numTodo += numToDo;
     }
-
-    @Override
-    public String commentPart(String line) {
-        String pattern = "(.*?)(;\\s*)(//.*)*";
-        if (line.matches(pattern)) {
-            return line.replaceAll(pattern, "$3");
-        } else {
-            return null;
-        }
-    }
-
-    @Override
-    public boolean isSingleLineComment(String comment) {
-        return comment.startsWith("//");
-    }
-
-    @Override
-    public boolean isBlockLineComment(String comment) {
-        return comment.startsWith("/*") ||
-                comment.startsWith("*") ||
-                comment.startsWith("*/");
-    }
-
-    @Override
-    public boolean isContainStartOfBlockComment(String comment) {
-        return comment.startsWith("/*");
-    }
-
-    @Override
-    public boolean isContainEndOfBlockComment(String comment) {
-        return comment.endsWith("*/");
-    }
-
-    @Override
-    public boolean isTODO(String comment) {
-        return comment.toUpperCase().contains("TODO");
-    }
 }

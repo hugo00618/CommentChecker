@@ -53,7 +53,7 @@ public class CommentChecker {
         // do parsing if applicable
         if (sc != null) {
             try {
-                CodeParser.Result res = CodeParser.newParse(br, sc);
+                CodeParser.Result res = CodeParser.parse(br, sc);
 
                 System.out.println("Total # of lines: " + res.numLine);
                 System.out.println("Total # of comment lines: " + res.numCommentLine);
