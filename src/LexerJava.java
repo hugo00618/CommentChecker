@@ -47,10 +47,15 @@ public class LexerJava extends Lexer {
                     }
                     break;
                 case quote:
-                    if (line.startsWith("\"")) {
+                    // if there is a \" inside of quotes, ignore it
+                    if (line.startsWith("\\\"")) {
+                        line = line.substring(2);
+                    } else if (line.startsWith("\"")) {
                         intraLineState = IntraLineState.code;
+                        line = line.substring(1);
+                    } else {
+                        line = line.substring(1);
                     }
-                    line = line.substring(1);
                     break;
                 case inlineComment:
                     isComment = true;

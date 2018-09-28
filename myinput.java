@@ -1,4 +1,4 @@
 class input {
 
-    String s = "//";
+    String s = "\"//";
 }
