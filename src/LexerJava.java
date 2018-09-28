@@ -47,7 +47,7 @@ public class LexerJava extends Lexer {
                     }
                     break;
                 case doubleQuote:
-                    // if there is a \" inside of quotes, ignore it
+                    // ignore double quotes as string content
                     if (line.startsWith("\\\"")) {
                         line = line.substring(2);
                     } else if (line.startsWith("\"")) {
