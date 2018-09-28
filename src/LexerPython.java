@@ -14,20 +14,29 @@ public class LexerPython extends Lexer {
         while (!line.isEmpty()) {
             switch (intraLineState) {
                 case start:
-                case code:
-                    if (line.startsWith("#")) {
+                    if (line.startsWith("#")) { // whole line comment
+                        // if last line is a block comment or also a whole line comment,
+                        // then we are in a block comment
                         isComment = true;
-
-                        // if last line is also a comment, then we are in a block comment
-                        if (interLineState == InterLineState.inlineComment ||
-                        interLineState == InterLineState.blockComment) {
+                        if (interLineState == InterLineState.wholeLineComment ||
+                                interLineState == InterLineState.blockComment) {
                             isBlockLineComment = true;
                             intraLineState = IntraLineState.blockComment;
                         } else {
                             isSingleLineComment = true;
-                            intraLineState = IntraLineState.inlineComment;
+                            intraLineState = IntraLineState.wholeLineComment;
                         }
-
+                        line = line.substring(1);
+                    } else {
+                        intraLineState = IntraLineState.code;
+                        line = line.substring(1);
+                    }
+                    break;
+                case code:
+                    if (line.startsWith("#")) {
+                        isComment = true;
+                        isSingleLineComment = true;
+                        intraLineState = IntraLineState.inlineComment;
                         line = line.substring(1);
                     } else if (line.startsWith("\'")) {
                         intraLineState = IntraLineState.singleQuote;
@@ -63,6 +72,7 @@ public class LexerPython extends Lexer {
                     }
                     break;
                 case inlineComment:
+                case wholeLineComment:
                     isComment = true;
                     isSingleLineComment = true;
 
@@ -92,10 +102,10 @@ public class LexerPython extends Lexer {
             line = line.trim();
         }
 
-        // if last line is an inline comment and current line is block comment,
+        // if last line is a whole line comment and current line is block comment,
         // then we have found a new block comment. Needs to update comment type stats
-        if (interLineState == InterLineState.inlineComment &&
-        intraLineState == IntraLineState.blockComment) {
+        if (interLineState == InterLineState.wholeLineComment &&
+                intraLineState == IntraLineState.blockComment) {
             res.numSingleLineComment--;
             res.numBlockLineComment++;
             res.numBlockComment++;
@@ -109,8 +119,8 @@ public class LexerPython extends Lexer {
 
         if (intraLineState == IntraLineState.blockComment) {
             interLineState = InterLineState.blockComment;
-        } else if (intraLineState == IntraLineState.inlineComment) {
-            interLineState = InterLineState.inlineComment;
+        } else if (intraLineState == IntraLineState.wholeLineComment) {
+            interLineState = InterLineState.wholeLineComment;
         } else {
             interLineState = InterLineState.code;
         }
