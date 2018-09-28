@@ -38,6 +38,7 @@ public class LexerJava extends Lexer {
                         line = line.substring(2);
                     } else if (line.startsWith("\"")) {
                         intraLineState = IntraLineState.quote;
+                        line = line.substring(1);
                     } else {
                         intraLineState = IntraLineState.code;
                         line = line.substring(1);
@@ -82,6 +83,7 @@ public class LexerJava extends Lexer {
                             line = "";
                         }
                     }
+                    break;
             }
             line = line.trim();
         }

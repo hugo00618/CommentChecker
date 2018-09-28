@@ -1,5 +1,4 @@
-class input { /* todo: comment */ int i = 0; /* todo: comment */ // todo: comment
+class input {
 
-    int j = 5 + // todo: comment
-            3;
+    String s = "//";
 }

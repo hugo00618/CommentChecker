@@ -5,7 +5,7 @@ public abstract class Lexer {
     }
 
     public enum InterLineState {
-        start, code, blockComment;
+        start, code, inlineComment, blockComment;
     }
 
     IntraLineState intraLineState = IntraLineState.start;
