@@ -7,15 +7,14 @@ public class CommentChecker {
 
     public static void main(String[] args) {
 
-        // check input.js arguments
+        // check input arguments
         if (args.length != 1) {
             System.err.println("Usage: java CommentChecker [ filename ]");
             return;
         }
 
-        String filename = args[0];
-
         // open file
+        String filename = args[0];
         BufferedReader br;
         try {
             br = new BufferedReader(new FileReader(args[0]));
@@ -24,14 +23,14 @@ public class CommentChecker {
             return;
         }
 
-        // ignore file names start with . and file names that don't have extension
+        // ignore file names start with . and file names without extension
         if (filename.startsWith(".") || !filename.contains(".")) {
             System.out.println("Ignored file: " + filename);
             return;
         }
 
-        // check extension and construct corresponding parser object
-        Lexer sc = null;
+        // check extension and construct corresponding lexer object
+        Lexer lexer = null;
         String extension = filename.substring(filename.lastIndexOf('.') + 1).toLowerCase();
         switch (extension) {
             case "c":
@@ -42,18 +41,18 @@ public class CommentChecker {
             case "hpp":
             case "java":
             case "js":
-                sc = new LexerJava();
+                lexer = new LexerJava();
                 break;
             case "py":
-                sc = new LexerPython();
+                lexer = new LexerPython();
             default:
                 break;
         }
 
         // do parsing if applicable
-        if (sc != null) {
+        if (lexer != null) {
             try {
-                CodeParser.Result res = CodeParser.parse(br, sc);
+                CodeParser.Result res = CodeParser.parse(br, lexer);
 
                 System.out.println("Total # of lines: " + res.numLine);
                 System.out.println("Total # of comment lines: " + res.numCommentLine);
@@ -62,7 +61,8 @@ public class CommentChecker {
                 System.out.println("Total # of block line comments: " + res.numBlockComment);
                 System.out.println("Total # of TODO’s: " + res.numTodo);
             } catch (IOException e) {
-
+                e.printStackTrace();
+                System.err.println("Error reading file: " + filename);
             }
         } else {
             System.out.println("File not supported: " + filename);

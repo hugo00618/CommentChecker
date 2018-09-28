@@ -10,12 +10,14 @@ public class LexerJava extends Lexer {
         boolean isStartOfBlockComment = false;
         int numToDo = 0;
 
+        // if last line is a block comment, then we are automatically in a block comment
         if (interLineState == InterLineState.blockComment) {
             intraLineState = IntraLineState.blockComment;
         } else {
             intraLineState = IntraLineState.start;
         }
 
+        // scan each part in line and update flag variables
         while (!line.isEmpty()) {
             switch (intraLineState) {
                 case start:
@@ -53,6 +55,8 @@ public class LexerJava extends Lexer {
                 case inlineComment:
                     isComment = true;
                     isSingleLineComment = true;
+
+                    // find "to do"
                     int todoIdx = line.toUpperCase().indexOf("TODO");
                     if (todoIdx != -1) {
                         numToDo++;
@@ -64,10 +68,11 @@ public class LexerJava extends Lexer {
                 case blockComment:
                     isComment = true;
                     isBlockLineComment = true;
+
                     int endOfBlockIdx = line.indexOf("*/");
                     todoIdx = line.toUpperCase().indexOf("TODO");
                     if (endOfBlockIdx != -1) {
-                        // if there is a to do within block comment
+                        // if there is a "to do" within block comment
                         if (todoIdx != -1 && todoIdx < endOfBlockIdx) {
                             numToDo++;
                             line = line.substring(todoIdx + 4);
@@ -88,17 +93,19 @@ public class LexerJava extends Lexer {
             line = line.trim();
         }
 
-        if (intraLineState == IntraLineState.blockComment) {
-            interLineState = InterLineState.blockComment;
-        } else {
-            interLineState = InterLineState.code;
-        }
-
+        // update stats
         res.numLine++;
         if (isComment) res.numCommentLine++;
         if (isSingleLineComment) res.numSingleLineComment++;
         if (isBlockLineComment) res.numBlockLineComment++;
         if (isStartOfBlockComment) res.numBlockComment++;
         res.numTodo += numToDo;
+
+        // update interLineState
+        if (intraLineState == IntraLineState.blockComment) {
+            interLineState = InterLineState.blockComment;
+        } else {
+            interLineState = InterLineState.code;
+        }
     }
 }

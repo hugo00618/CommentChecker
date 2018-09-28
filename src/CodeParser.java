@@ -25,6 +25,7 @@ public class CodeParser {
     public static Result parse(BufferedReader br, Lexer lexer) throws IOException {
         Result res = new Result(0,0,0,
                 0,0,0);
+
         String line;
         while ((line = br.readLine()) != null) {
             lexer.scan(line, res);

@@ -1,9 +1,11 @@
 public abstract class Lexer {
 
+    // tracks the state within a line
     public enum IntraLineState {
         start, code, quote, inlineComment, blockComment;
     }
 
+    // tracks the state between lines
     public enum InterLineState {
         start, code, inlineComment, blockComment;
     }
@@ -12,7 +14,7 @@ public abstract class Lexer {
     InterLineState interLineState = InterLineState.start;
 
     /**
-     * scan each line
+     * scans the line and updates comment stats
      * @param line
      * @param res
      */

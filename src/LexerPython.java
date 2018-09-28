@@ -18,7 +18,7 @@ public class LexerPython extends Lexer {
                     if (line.startsWith("#")) {
                         isComment = true;
 
-                        // if last is also a comment, then we are in block comment
+                        // if last line is also a comment, then we are in a block comment
                         if (interLineState == InterLineState.inlineComment ||
                         interLineState == InterLineState.blockComment) {
                             isBlockLineComment = true;
@@ -46,6 +46,8 @@ public class LexerPython extends Lexer {
                 case inlineComment:
                     isComment = true;
                     isSingleLineComment = true;
+
+                    // find "to do"
                     int todoIdx = line.toUpperCase().indexOf("TODO");
                     if (todoIdx != -1) {
                         numToDo++;
@@ -57,6 +59,8 @@ public class LexerPython extends Lexer {
                 case blockComment:
                     isComment = true;
                     isBlockLineComment = true;
+
+                    // find "to do"
                     todoIdx = line.toUpperCase().indexOf("TODO");
                     if (todoIdx != -1) {
                         numToDo++;
@@ -70,13 +74,19 @@ public class LexerPython extends Lexer {
         }
 
         // if last line is an inline comment and current line is block comment,
-        // then we have found a new block comment. Need to update comment type stats
+        // then we have found a new block comment. Needs to update comment type stats
         if (interLineState == InterLineState.inlineComment &&
         intraLineState == IntraLineState.blockComment) {
             res.numSingleLineComment--;
             res.numBlockLineComment++;
             res.numBlockComment++;
         }
+
+        res.numLine++;
+        if (isComment) res.numCommentLine++;
+        if (isSingleLineComment) res.numSingleLineComment++;
+        if (isBlockLineComment) res.numBlockLineComment++;
+        res.numTodo += numToDo;
 
         if (intraLineState == IntraLineState.blockComment) {
             interLineState = InterLineState.blockComment;
@@ -85,12 +95,6 @@ public class LexerPython extends Lexer {
         } else {
             interLineState = InterLineState.code;
         }
-
-        res.numLine++;
-        if (isComment) res.numCommentLine++;
-        if (isSingleLineComment) res.numSingleLineComment++;
-        if (isBlockLineComment) res.numBlockLineComment++;
-        res.numTodo += numToDo;
     }
 
 }
