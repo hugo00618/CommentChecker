@@ -47,6 +47,7 @@ public class CommentChecker {
                 break;
             case "py":
                 lexer = new LexerPython();
+                break;
             default:
                 break;
         }
