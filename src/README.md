@@ -4,8 +4,25 @@
 
 ## Compile and Run
 
-	$ make
-	$ java CommentChecker { path to input file }
+~~~
+$ make
+$ java CommentChecker { path to input file }
+~~~
+
+---
+
+## Assumptions
+* For C-style languages, two block comments in the same line are counted as one **line within block comments** and two **block line comments**.
+	* For example, `int i = 0; /* block comment 1 */ int j = 0; /* block comment 2 */`
+		* adds 1 to the **total # of comment lines**
+		* adds 1 to the **total # of comment lines within block comments**
+		* adds 2 to the **total # of block line comments**
+* Similar rule applies when we have block comments and an inline comment in the same line.
+	* For example, `int i = 0; /* block comment */ int j = 0; // inline comment`
+		* adds 1 to the **total # of comment lines**
+		* adds 1 to the **total # of single line comments**
+		* adds 1 to the **total # of comment lines within block comments**
+		* adds 1 to the **total # of block line comments**
 
 ---
 

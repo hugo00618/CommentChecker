@@ -7,7 +7,7 @@ public class LexerJava extends Lexer {
         boolean isComment = false;
         boolean isSingleLineComment = false;
         boolean isBlockLineComment = false;
-        boolean isStartOfBlockComment = false;
+        int numBlockComment = 0;
         int numToDo = 0;
 
         // if last line is a block comment, then we are automatically in a block comment
@@ -31,7 +31,7 @@ public class LexerJava extends Lexer {
                         intraLineState = IntraLineState.blockComment;
                         isComment = true;
                         isBlockLineComment = true;
-                        isStartOfBlockComment = true;
+                        numBlockComment++;
                         line = line.substring(2);
                     } else if (line.startsWith("*/")) {
                         intraLineState = IntraLineState.code;
@@ -103,7 +103,7 @@ public class LexerJava extends Lexer {
         if (isComment) res.numCommentLine++;
         if (isSingleLineComment) res.numSingleLineComment++;
         if (isBlockLineComment) res.numBlockLineComment++;
-        if (isStartOfBlockComment) res.numBlockComment++;
+        res.numBlockComment += numBlockComment;
         res.numTodo += numToDo;
 
         // update interLineState
