@@ -82,3 +82,7 @@ fabric.properties
 
 
 # End of https://www.gitignore.io/api/intellij
+
+input.java
+input.js
+input.py
